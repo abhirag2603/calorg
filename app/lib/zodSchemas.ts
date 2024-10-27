@@ -38,3 +38,10 @@ export function onboardingSchemaValidation(options?: { isUsernameUnique: () => P
     fullName: z.string().min(3).max(150),
   });
 }
+
+export const aboutSettingsSchema = z.object({
+  fullName: z.string().min(3).max(150),
+
+  profileImage: z.string(),
+});
+

@@ -14,6 +14,7 @@ import { auth, signOut } from "../lib/auth";
 import { requireUser } from "../lib/hooks";
 import prisma from "../lib/db";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
 
 
 async function getData(userId: any){
@@ -23,8 +24,13 @@ const data= await prisma.user.findUnique({
     },
     select:{
         userName: true,
+        grantId: true,
     }
 })
+
+if(!data?.grantId){
+    return redirect("/onboarding/grant-id")
+}
 
 if(!data?.userName){
     return redirect("/onboarding")
@@ -98,6 +104,7 @@ export default async function DashboardLayout({children}:{children:ReactNode}) {
                 </main>
 
              </div>
+             <Toaster richColors closeButton />
         </div>
     )
     }
