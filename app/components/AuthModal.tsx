@@ -24,9 +24,9 @@ export function AuthModal() {
       <DialogContent className="sm:max-w-[360px]">
         <DialogTitle className="flex justify-center items-center gap-x-2">
           <Image src={Logo} className="size-10" alt="Logo" />
-          <h4 className="text-2xl  font-semibold">
+          <p className="text-2xl  font-semibold">
             Cal<span className="text-primary">Org</span>
-          </h4>
+          </p>
         </DialogTitle>
         <div className="flex flex-col gap-3 mt-5">
           <form

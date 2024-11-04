@@ -16,7 +16,7 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { SubmitButton } from "./SubmitButton";
 import { UploadDropzone } from "@/app/lib/uploadthing";
 import Image from "next/image";
@@ -32,7 +32,7 @@ interface iAppProps {
 }
 
 export function SettingsForm({ fullName, email, profileImage }: iAppProps) {
-  const [lastResult, action] = useFormState(SettingsAction, undefined);
+  const [lastResult, action] = useActionState(SettingsAction, undefined);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
 
   const [form, fields] = useForm({
