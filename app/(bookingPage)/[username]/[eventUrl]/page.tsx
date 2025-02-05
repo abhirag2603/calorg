@@ -10,6 +10,8 @@ import { BookMarked, CalendarX2, Clock } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
+import { TimeSlots } from "@/app/components/TimeSlots";
+import { createMeetingAction } from "@/app/actions";
 
 async function getData(username: string, eventName: string) {
   const eventType = await prisma.eventType.findFirst({
@@ -117,7 +119,9 @@ const BookingPage = async ({
               className="hidden md:block h-full w-[1px]"
             />
 
-            <form className="flex flex-col gap-y-4">
+            <form className="flex flex-col gap-y-4"
+            action={createMeetingAction}
+            >
               <input type="hidden" name="eventTypeId" value={eventType.id} />
               <input type="hidden" name="username" value={username} />
               <input type="hidden" name="fromTime" value={time} />
@@ -194,6 +198,7 @@ const BookingPage = async ({
               orientation="vertical"
               className="hidden md:block h-full w-[1px]"
             />
+            <TimeSlots selectedDate={selectedDate} userName={params.username} meetingDuration={eventType.duration}/>
           </CardContent>
         </Card>
       )}
