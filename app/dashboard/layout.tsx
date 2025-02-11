@@ -28,13 +28,15 @@ const data= await prisma.user.findUnique({
     }
 })
 
+if(!data?.userName){
+    return redirect("/onboarding")
+}
+
 if(!data?.grantId){
     return redirect("/onboarding/grant-id")
 }
 
-if(!data?.userName){
-    return redirect("/onboarding")
-}
+
 }
 
 export default async function DashboardLayout({children}:{children:ReactNode}) {

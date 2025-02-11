@@ -5,13 +5,38 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card";
+  import prisma from "@/app/lib/db";
   import React from "react";
   import Image from "next/image";
   import { Button } from "@/components/ui/button";
   import { CalendarCheck2 } from "lucide-react";
   import Link from "next/link";
+import { redirect } from "next/navigation";
+import { requireUser } from "@/app/lib/hooks";
+
+  async function getData(userId: any){
+    const data= await prisma.user.findUnique({
+        where:{
+            id:userId,
+        },
+        select:{
+            userName: true,
+        }
+    })
+    
+    
+    if(!data?.userName){
+        return redirect("/onboarding")
+    }
+
+    return data;
+    }
   
-  const GrantIdRoute = () => {
+    export default async function  GrantIdRoute() {
+    const session = await requireUser();
+    const data= await getData(session.user?.id as string
+    )
+
     return (
       <div className="min-h-screen w-screen flex items-center justify-center">
         <Card>
@@ -34,4 +59,4 @@ import {
     );
   };
   
-  export default GrantIdRoute;
+  
