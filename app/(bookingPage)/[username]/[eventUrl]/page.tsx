@@ -1,5 +1,7 @@
+import { createMeetingAction } from "@/app/actions";
 import { RenderCalendar } from "@/app/components/bookingForm/RenderCalendar";
 import { SubmitButton } from "@/app/components/SubmitButton";
+import { TimeSlots } from "@/app/components/TimeSlots";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,8 +12,6 @@ import { BookMarked, CalendarX2, Clock } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
-import { TimeSlots } from "@/app/components/TimeSlots";
-import { createMeetingAction } from "@/app/actions";
 
 async function getData(username: string, eventName: string) {
   const eventType = await prisma.eventType.findFirst({
@@ -28,6 +28,7 @@ async function getData(username: string, eventName: string) {
       title: true,
       duration: true,
       videoCallSoftware: true,
+
       user: {
         select: {
           image: true,
@@ -50,19 +51,23 @@ async function getData(username: string, eventName: string) {
   return eventType;
 }
 
-const BookingPage = async ({
-  params,
-  searchParams,
-}: {
-  params: { username: string; eventName: string };
-  searchParams: { date?: string; time?: string };
-}) => {
-  // Destructure and await dynamic params and searchParams
-  const { username, eventName } = params;
-  const { date, time } = searchParams;
+interface PageProps {
+  params: {
+    username: string;
+    eventName: string;
+  };
+  searchParams: {
+    date?: string;
+    time?: string;
+  };
+}
 
-  const selectedDate = date ? new Date(date) : new Date();
-  const eventType = await getData(username, eventName);
+const BookingPage =async ({ params, searchParams }: PageProps) => {
+  const selectedDate = searchParams.date
+    ? new Date(searchParams.date)
+    : new Date();
+  const eventType = await getData(params.username, params.eventName);
+  const { username, eventName } = params as { username: string; eventName: string };
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -70,7 +75,7 @@ const BookingPage = async ({
     month: "long",
   }).format(selectedDate);
 
-  const showForm = !!date && !!time;
+  const showForm = !!searchParams.date && !!searchParams.time;
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center">
@@ -119,13 +124,14 @@ const BookingPage = async ({
               className="hidden md:block h-full w-[1px]"
             />
 
-            <form className="flex flex-col gap-y-4"
-            action={createMeetingAction}
+            <form
+              className="flex flex-col gap-y-4"
+              action={createMeetingAction}
             >
               <input type="hidden" name="eventTypeId" value={eventType.id} />
-              <input type="hidden" name="username" value={username} />
-              <input type="hidden" name="fromTime" value={time} />
-              <input type="hidden" name="eventDate" value={date} />
+              <input type="hidden" name="username" value={params.username} />
+              <input type="hidden" name="fromTime" value={searchParams.time} />
+              <input type="hidden" name="eventDate" value={searchParams.date} />
               <input
                 type="hidden"
                 name="meetingLength"
@@ -198,7 +204,12 @@ const BookingPage = async ({
               orientation="vertical"
               className="hidden md:block h-full w-[1px]"
             />
-            <TimeSlots selectedDate={selectedDate} userName={params.username} meetingDuration={eventType.duration}/>
+
+            <TimeSlots
+              selectedDate={selectedDate}
+              userName={params.username}
+              meetingDuration={eventType.duration}
+            />
           </CardContent>
         </Card>
       )}

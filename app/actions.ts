@@ -8,7 +8,7 @@ import { onboardingSchemaValidation,aboutSettingsSchema,eventTypeSchema,EventTyp
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
-export async function onBoardingAction(prevState: any, formData: FormData) {
+export async function onBoardingAction(prevState: Record<string, unknown>, formData: FormData) {
   const session = await requireUser();
 
   const submission = await parseWithZod(formData, {

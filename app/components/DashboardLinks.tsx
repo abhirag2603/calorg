@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface iAppProps{
-    id: Number;
+    id: number;
     name: string;
     href: string;
     icon:any;

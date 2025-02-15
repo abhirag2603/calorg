@@ -84,7 +84,7 @@ export default async function DashboardLayout({children}:{children:ReactNode}) {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant='secondary' size='icon' className="rounded-full">
-                                <img src={session?.user?.image as string} alt='Profile image' className="w-full h-full rounded-full" width={20} height={20} />
+                                <Image src={session?.user?.image as string} alt='Profile image' className="w-full h-full rounded-full" width={20} height={20} />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">

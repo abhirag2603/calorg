@@ -86,7 +86,7 @@ export function SettingsForm({ fullName, email, profileImage }: iAppProps) {
             <Label>Profile Image</Label>
             {currentProfileImage ? (
               <div className="relative size-16">
-                <img
+                <Image
                   src={currentProfileImage}
                   alt="Profile"
                   className="rounded-lg size-16"
