@@ -46,14 +46,17 @@ import {
       },
     });
   
-    const nylasCalendarData = await nylas.calendars.getFreeBusy({
-      identifier: data?.User.grantId as string,
-      requestBody: {
-        startTime: Math.floor(startOfDay.getTime() / 1000),
-        endTime: Math.floor(endOfDay.getTime() / 1000),
-        emails: [data?.User.grantEmail as string],
-      },
-    });
+    const nylasCalendarData =
+  data?.User?.grantId && data?.User?.grantEmail
+    ? await nylas.calendars.getFreeBusy({
+        identifier: data.User.grantId,
+        requestBody: {
+          startTime: Math.floor(startOfDay.getTime() / 1000),
+          endTime: Math.floor(endOfDay.getTime() / 1000),
+          emails: [data.User.grantEmail],
+        },
+      })
+    : null;
   
     return { data, nylasCalendarData };
   }
@@ -136,7 +139,7 @@ import {
   
     const availableSlots = calculateAvailableTimeSlots(
       dbAvailability,
-      nylasCalendarData,
+      nylasCalendarData!,
       formattedDate,
       meetingDuration
     );

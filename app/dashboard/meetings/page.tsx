@@ -48,6 +48,7 @@ async function  getData(userId: string) {
 export default async function MeetingsRoute(){
      const session = await requireUser();
       const data = await getData(session.user?.id as string); 
+      console.log(data)
 
     return(
         <>
@@ -72,18 +73,19 @@ export default async function MeetingsRoute(){
                   <div className="grid grid-cols-3 justify-between items-center">
                     <div>
                       <p className="text-muted-foreground text-sm">
-                        {format(fromUnixTime(item.when.startTime), "EEE, dd MMM")}
+                      {format(fromUnixTime((item.when as any).startTime), "EEE, dd MMM")}
+
                       </p>
                       <p className="text-muted-foreground text-xs pt-1">
-                        {format(fromUnixTime(item.when.startTime), "hh:mm a")} -{" "}
-                        {format(fromUnixTime(item.when.endTime), "hh:mm a")}
+                        {format(fromUnixTime((item.when as any).startTime), "hh:mm a")} -{" "}
+                        {format(fromUnixTime((item.when as any).endTime), "hh:mm a")}
                       </p>
                       <div className="flex items-center mt-1">
                         <Video className="size-4 mr-2 text-primary" />{" "}
                         <a
                           className="text-xs text-primary underline underline-offset-4"
                           target="_blank"
-                          href={item.conferencing.details.url}
+                          href={(item.conferencing as any).details.url}
                         >
                           Join Meeting
                         </a>

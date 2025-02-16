@@ -120,7 +120,7 @@ export default async function DashboardPage() {
                   </div>
                 </Link>
                 <div className="bg-muted px-5 py-3 justify-between items-center flex">
-                  <Switch />
+             
                   <Button>
                     Edit event
                   </Button>

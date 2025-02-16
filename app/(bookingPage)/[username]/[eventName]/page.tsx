@@ -1,18 +1,22 @@
-import { createMeetingAction } from "@/app/actions";
 import { RenderCalendar } from "@/app/components/bookingForm/RenderCalendar";
 import { SubmitButton } from "@/app/components/SubmitButton";
-import { TimeSlots } from "@/app/components/TimeSlots";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import prisma from "@/app/lib/db";
-import { format } from "date-fns";
 import { BookMarked, CalendarX2, Clock } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import React from "react";
+import { TimeSlots } from "@/app/components/TimeSlots";
+import { createMeetingAction } from "@/app/actions";
 
+export interface PageProps {
+  params: { username: string; eventUrl: string };
+  searchParams?: { date?: string; time?: string };
+}
+
+// Fetch event data
 async function getData(username: string, eventName: string) {
   const eventType = await prisma.eventType.findFirst({
     where: {
@@ -28,7 +32,6 @@ async function getData(username: string, eventName: string) {
       title: true,
       duration: true,
       videoCallSoftware: true,
-
       user: {
         select: {
           image: true,
@@ -45,37 +48,40 @@ async function getData(username: string, eventName: string) {
   });
 
   if (!eventType) {
-    return notFound();
+    notFound();
   }
 
   return eventType;
 }
 
-interface PageProps {
-  params: {
-    username: string;
-    eventName: string;
-  };
-  searchParams: {
-    date?: string;
-    time?: string;
-  };
-}
+const BookinPage = async ({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ username: string; eventName:string }>;
+  searchParams: Promise<{ date?: string; time?: string }>;
+})  => {
+ 
+    const { username, eventName } = await params;
+  
+  
+  const { date, time } = await searchParams;
+ 
+  
+  const eventType = await getData(username,eventName);
 
-const BookingPage =async ({ params, searchParams }: PageProps) => {
-  const selectedDate = searchParams.date
-    ? new Date(searchParams.date)
-    : new Date();
-  const eventType = await getData(params.username, params.eventName);
-  const { username, eventName } = params as { username: string; eventName: string };
+  if (!eventType) {
+    return notFound();
+  }
 
+  const selectedDate = date ? new Date(date) : new Date();
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
     day: "numeric",
     month: "long",
   }).format(selectedDate);
 
-  const showForm = !!searchParams.date && !!searchParams.time;
+  const showForm = !!date && !!time;
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center">
@@ -124,14 +130,11 @@ const BookingPage =async ({ params, searchParams }: PageProps) => {
               className="hidden md:block h-full w-[1px]"
             />
 
-            <form
-              className="flex flex-col gap-y-4"
-              action={createMeetingAction}
-            >
+            <form className="flex flex-col gap-y-4" action={createMeetingAction}>
               <input type="hidden" name="eventTypeId" value={eventType.id} />
-              <input type="hidden" name="username" value={params.username} />
-              <input type="hidden" name="fromTime" value={searchParams.time} />
-              <input type="hidden" name="eventDate" value={searchParams.date} />
+              <input type="hidden" name="username" value={username} />
+              <input type="hidden" name="fromTime" value={time} />
+              <input type="hidden" name="eventDate" value={date} />
               <input
                 type="hidden"
                 name="meetingLength"
@@ -185,7 +188,7 @@ const BookingPage =async ({ params, searchParams }: PageProps) => {
                 <p className="flex items-center">
                   <BookMarked className="size-4 mr-2 text-primary" />
                   <span className="text-sm font-medium text-muted-foreground">
-                    Google Meet
+                    {eventType.videoCallSoftware}
                   </span>
                 </p>
               </div>
@@ -204,10 +207,9 @@ const BookingPage =async ({ params, searchParams }: PageProps) => {
               orientation="vertical"
               className="hidden md:block h-full w-[1px]"
             />
-
             <TimeSlots
               selectedDate={selectedDate}
-              userName={params.username}
+              userName={username}
               meetingDuration={eventType.duration}
             />
           </CardContent>
@@ -215,6 +217,6 @@ const BookingPage =async ({ params, searchParams }: PageProps) => {
       )}
     </div>
   );
-};
+}
 
-export default BookingPage;
+export default BookinPage;
