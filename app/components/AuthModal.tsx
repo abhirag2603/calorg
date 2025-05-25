@@ -39,7 +39,7 @@ export function AuthModal() {
             <GoogleAuthButton />
           </form>
 
-          <form
+          {/* <form
             className="w-full"
             action={async () => {
               "use server";
@@ -47,7 +47,8 @@ export function AuthModal() {
             }}
           >
             <GitHubAuthButton />
-          </form>
+          </form> */}
+          <h3 className="text-center text-muted-foreground">Github auth is currently unavailable</h3>
         </div>
       </DialogContent>
     </Dialog>
