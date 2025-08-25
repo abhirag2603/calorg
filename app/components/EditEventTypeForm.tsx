@@ -52,15 +52,12 @@ export function EditEventTypeForm({
 }: iAppProps) {
   const [lastResult, action] = useFormState(EditEventTypeAction, undefined);
   const [form, fields] = useForm({
-    // Sync the result of last submission
     lastResult,
 
-    // Reuse the validation logic on the client
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: eventTypeSchema });
     },
 
-    // Validate the form on blur event triggered
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });

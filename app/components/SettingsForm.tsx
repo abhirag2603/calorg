@@ -36,15 +36,12 @@ export function SettingsForm({ fullName, email, profileImage }: iAppProps) {
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
 
   const [form, fields] = useForm({
-    // Sync the result of last submission
     lastResult,
 
-    // Reuse the validation logic on the client
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: aboutSettingsSchema });
     },
 
-    // Validate the form on blur event triggered
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });

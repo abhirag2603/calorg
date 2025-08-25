@@ -24,7 +24,6 @@ export function CalendarCell({
   const { cellProps, buttonProps, isSelected, isDisabled, formattedDate } =
     useCalendarCell({ date }, state, ref);
 
-  // Override isDisabled if the date is unavailable
   const finalIsDisabled = isDisabled || isUnavailable;
 
   const { focusProps, isFocusVisible } = useFocusRing();

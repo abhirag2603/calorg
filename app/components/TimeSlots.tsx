@@ -70,9 +70,8 @@ import {
     date: string,
     duration: number
   ) {
-    const now = new Date(); // Get the current time
+    const now = new Date(); 
   
-    // Convert DB availability to Date objects
     const availableFrom = parse(
       `${date} ${dbAvailability.fromTime}`,
       "yyyy-MM-dd HH:mm",
@@ -84,7 +83,7 @@ import {
       new Date()
     );
   
-    // Extract busy slots from Nylas data
+
     const busySlots =
     nylasData?.data?.[0] && "timeSlots" in nylasData.data[0]
       ? nylasData.data[0].timeSlots.map((slot: any) => ({
@@ -94,7 +93,6 @@ import {
       : [];
 
     
-    // Generate all possible 30-minute slots within the available time
     const allSlots: Date[] = [];
     let currentSlot = availableFrom;
     while (isBefore(currentSlot, availableTill)) {
@@ -104,12 +102,10 @@ import {
      
     }
 
-
-    // Filter out busy slots and slots before the current time
     const freeSlots = allSlots.filter((slot) => {
       const slotEnd = addMinutes(slot, duration);
       return (
-        isAfter(slot, now) && // Ensure the slot is after the current time
+        isAfter(slot, now) && 
         !busySlots.some(
           (busy: { start: any; end: any }) =>
             (!isBefore(slot, busy.start) && isBefore(slot, busy.end)) ||
@@ -119,7 +115,6 @@ import {
       );
     });
   
-    // Format the free slots
     return freeSlots.map((slot) => format(slot, "HH:mm"));
   }
   

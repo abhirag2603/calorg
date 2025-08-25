@@ -43,7 +43,6 @@ export function RenderCalendar({ daysofWeek }: iAppProps) {
 
   const isDateUnavailable = (date: DateValue) => {
     const dayOfWeek = date.toDate(getLocalTimeZone()).getDay();
-    // Adjust the index to match the daysofWeek array
     const adjustedIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
     return !daysofWeek[adjustedIndex].isActive;
   };

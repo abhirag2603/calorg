@@ -11,7 +11,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import { auth, signOut } from "../lib/auth";
-import { requireUser } from "../lib/hooks";
+import { requireUser } from "../lib/hooks"; 
 import prisma from "../lib/db";
 import { redirect } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
